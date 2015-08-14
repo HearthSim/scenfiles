@@ -1,0 +1,1 @@
+Scenario files for Hearthstone
