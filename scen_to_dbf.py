@@ -96,8 +96,11 @@ def decompile_proto(record):
 	for string in record.strings:
 		strings = {}
 		for value in string.values:
-			locale = Locale(value.locale).name
-			strings[locale] = value.value
+			try:
+				locale = Locale(value.locale).name
+				strings[locale] = value.value
+			except Exception:
+				sys.stderr.write("WARNING: Invalid locale %r\n" % (value.locale))
 		values[string.key] = strings
 
 	for field in ScenarioDbRecord.DESCRIPTOR.fields:
