@@ -32,11 +32,9 @@ class Locale(IntEnum):
 	ptBR = 11
 	plPL = 12
 	ptPT = 13
-	UNKNOWN_14 = 14
+	jaJP = 14
+	thTH = 15
 
-
-# Locales to exclude from serialization
-EXCLUDED_LOCALES = (Locale.UNKNOWN, Locale.enGB, Locale.ptPT, Locale.UNKNOWN_14)
 
 column_map = {
 	"num_players": "PLAYERS",
@@ -78,8 +76,7 @@ def proto_to_xml(record):
 		if isinstance(value, dict):
 			# Turn LocStrings into a sub-tree of locale elements
 			for locale in Locale:
-				if locale in EXCLUDED_LOCALES:
-					# Skip some locales
+				if locale.name not in value:
 					continue
 				locale_elem = ElementTree.Element(locale.name)
 				locale_elem.text = value[locale.name]
