@@ -1,12 +1,14 @@
 #!/bin/bash
 
-files=$(git status --porcelain Scenario | grep "^A  " | sed "s/^A  //")
+files=($(git status --porcelain Scenario | grep "^A  " | sed "s/^A  //"))
 
 for f in $files; do
 	hash=$(printf $f | sed "s|^Scenario/[0-9]*_||" | sed 's/\.scen$//g')
 	checksum=$(sha1sum "$f" | cut -d ' ' -f1)
-	if [ $checksum != ${hash,,} ]; then
-		>&2 printf "Checksum verification of $f failed: $checksum\n"
+	if [[ $checksum != ${hash,,} ]]; then
+		>&2 printf "Checksum verification of $f failed: $checksum != $hash\n"
 		exit 1
 	fi
 done
+
+printf "${#files[*]} checksums verified\n"
