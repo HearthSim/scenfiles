@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os.path
 import sys
+from argparse import ArgumentParser
 from collections import OrderedDict
 from lxml.etree import tostring
 from hearthstone.dbf import Dbf
@@ -103,13 +104,40 @@ class ScenarioProtoDBF(Dbf):
 		self.records.append(record)
 
 
-def main():
-	dbf = ScenarioProtoDBF()
+def squash_duplicates(files):
+	lookups = {}
 
-	for filename in sys.argv[1:]:
+	for filename in files:
+		id = int(os.path.basename(filename).split("_")[0])
+		if id not in lookups:
+			lookups[id] = []
+		lookups[id].append(filename)
+
+	for filelist in lookups.values():
+		filelist.sort(key=os.path.getmtime, reverse=True)
+
+	return [k[0] for k in lookups.values()]
+
+
+def create_dbf_from_files(files, squash=False):
+	if squash:
+		files = squash_duplicates(files)
+
+	dbf = ScenarioProtoDBF()
+	for filename in sorted(files):
 		with open(filename, "rb") as f:
 			dbf.load_proto(f)
 
+	return dbf
+
+
+def main():
+	parser = ArgumentParser()
+	parser.add_argument("files", nargs="*")
+	parser.add_argument("--squash", action="store_true", help="Ignore old duplicates")
+	args = parser.parse_args(sys.argv[1:])
+
+	dbf = create_dbf_from_files(args.files, squash=args.squash)
 	xml = dbf._to_xml()
 	ret = tostring(xml, encoding="utf-8", pretty_print=True, xml_declaration=True)
 	print(ret.decode("utf-8"))
