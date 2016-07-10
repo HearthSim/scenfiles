@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 import os.path
 import sys
-from enum import IntEnum
 from xml.dom import minidom
 from xml.etree import ElementTree
+from hearthstone.enums import Locale
 
 
 try:
@@ -14,26 +14,6 @@ except ImportError as e:
 	command = "protoc --python_out=%r %s" % (path, "ScenarioDbRecord.proto")
 	sys.stderr.write("Try running `%s`\n" % (command))
 	sys.exit(1)
-
-
-class Locale(IntEnum):
-	UNKNOWN = -1
-	enUS = 0
-	enGB = 1
-	frFR = 2
-	deDE = 3
-	koKR = 4
-	esES = 5
-	esMX = 6
-	ruRU = 7
-	zhTW = 8
-	zhCN = 9
-	itIT = 10
-	ptBR = 11
-	plPL = 12
-	ptPT = 13
-	jaJP = 14
-	thTH = 15
 
 
 column_map = {
