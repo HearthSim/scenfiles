@@ -86,7 +86,6 @@ class ScenarioProtoDBF(Dbf):
 			"COMPLETED_DESCRIPTION": None,
 			"PLAYER1_DECK_ID": None,
 			"DECK_BUILDER_ID": None,
-			"DECK_RULESET_ID": None,
 		}
 
 		for field in ScenarioDbRecord.DESCRIPTOR.fields:

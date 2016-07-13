@@ -47,6 +47,7 @@ message ScenarioDbRecord {
 	optional string tavern_brawl_texture_phone = 13;
 	optional Vector2 tavern_brawl_texture_phone_offset = 14;
 	optional bool is_coop = 15;
+	optional int32 deck_ruleset_id = 16;
 	repeated LocalizedString strings = 100;
 	repeated GameSetupRule rules = 101;
 }
